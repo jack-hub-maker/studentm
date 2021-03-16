@@ -4,10 +4,47 @@ const mongoose = require('mongoose')
 app.use(require('cors')())
 app.use(express.json())
 //服务端端口首页：
-app.get('/',async(req,res) =>{
-    res.send('hello node')
-})
+// app.get('/api/xyj',async(req,res) =>{
+//     // const xAxis = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+//     // res.send(xAxis);
 
+
+
+//     const xAxis= ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+//     const series = [140, 232, 101, 264, 90, 340, 250];
+//     const xyj =[xAxis,series]
+//     console.log(xyj);
+//     res.send(xyj);
+// })
+
+app.get('/api/xyj',async(req,res) =>{
+    const grade = await Student.find({$where:function(){return this.clan<80}});
+    const gradea = await Student.find({$where:function(){return this.javalan<80}});
+    // const grade = await Student.find({clan:{ $lte: 60}});
+    console.log(grade);
+    console.log(gradea);
+
+    let clan=[];
+    for (let i = 0; i < grade.length; i++) {
+        const nb = grade[i].clan;
+        clan.push(nb)
+        console.log(nb);
+    }
+    console.log(clan);
+
+    let javalan=[];
+    for (let i = 0; i < gradea.length; i++) {
+        const nba = gradea[i].javalan;
+        javalan.push(nba)
+        console.log(nba);
+    }
+    console.log(javalan);
+
+    const xAxis= javalan;
+    const series = clan;
+    const xyj =[xAxis,series]
+    res.send(xyj);
+})
 //显示学生列表：
 app.get('/api/getStudentList',async(req,res)=>{
     const students = await Student.find()
@@ -43,14 +80,14 @@ app.get('/api/findBySnumber/:xuehao',async(req,res)=>{
     const students = await Student.find({'snumber':req.params.xuehao})
     res.send(students)
 })
-//根据姓名模糊查询：
-app.get('/api/findByName/:names',async(req,res)=>{
-    var query = new RegExp(req.params.names)
-    const students = await Student.find({$or:[{"name": query}]})
-    res.send(students)
+// //根据姓名模糊查询：
+// app.get('/api/findByName/:names',async(req,res)=>{
+//     var query = new RegExp(req.params.names)
+//     const students = await Student.find({$or:[{"name": query}]})
+//     res.send(students)
+// })
 
-})
-//姓名模糊分页查询:
+//根据姓名模糊分页查询:
 app.get('/api/findByName', (req,res)=>{
 
     result= {
