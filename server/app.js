@@ -7,15 +7,24 @@ app.use(express.json())
 // app.get('/api/xyj',async(req,res) =>{
 //     // const xAxis = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 //     // res.send(xAxis);
-
-
-
 //     const xAxis= ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 //     const series = [140, 232, 101, 264, 90, 340, 250];
 //     const xyj =[xAxis,series]
 //     console.log(xyj);
 //     res.send(xyj);
 // })
+
+
+// 设置为可跨域
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+});
+
 
 app.get('/api/xyj',async(req,res) =>{
     const grade = await Student.find({$where:function(){return this.clan<80}});
@@ -96,7 +105,8 @@ app.get('/api/findByName', (req,res)=>{
     };
     // var total;
     var confident = new RegExp(req.query.names)
-
+    console.log(req.query.names);
+    console.log(confident);
     //总记录数：
     var query =  Student.find({$or:[{"name": confident}]});
     query.count({},function(err, count){
