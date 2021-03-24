@@ -1,12 +1,36 @@
 const { User,Student } = require('./models')
 const express = require('express')
 const jwt = require('jsonwebtoken')
-
 const app = express()
-const SECRET = 'dehabdhabjhrfajfr13uh24yh'
+// const SECRET = 'dehabdhabjhrfajfr13uh24yh'
+const config = require('./config'); // 引入配置
 
+var svgCaptcha = require('svg-captcha');
+const cookieParase = require('cookie-parser');
 app.use(require('cors')())
 app.use(express.json())
+
+app.use(cookieParase());
+app.get("/api/getCaptcha",function(req, res, next){
+    var captcha = svgCaptcha.create({ 
+      inverse: false, // 翻转颜色 
+      fontSize: 48, // 字体大小 
+      noise: 2, // 噪声线条数 
+      width: 100, // 宽度 
+      height: 40, // 高度 
+      size: 4,// 验证码长度
+      ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+    }); 
+    // 保存到session,忽略大小写 
+    req.session = captcha.text.toLowerCase(); 
+    console.log(req.session); //0xtg 生成的验证码
+    //保存到cookie 方便前端调用验证
+    res.cookie('captcha', req.session); 
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.write(String(captcha.data));
+    res.end();
+})
+
 
 // 设置为可跨域
 // app.all('*', function(req, res, next) {
@@ -17,7 +41,8 @@ app.use(express.json())
 //     res.header("Content-Type", "*");
 //     next();
 // });
-app.all('*',function(req, res, next) {//处理跨域
+app.all('*',function(req, res, next) {
+    //处理跨域
 	res.header("Access-Control-Allow-Origin","*");
 	res.header("Access-Control-Allow-Headers","X-Requested-With");
 	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
@@ -25,6 +50,8 @@ app.all('*',function(req, res, next) {//处理跨域
 	//res.header("Content-Type","*");  /**/
 	next();
 })
+
+const SECRET = config.SECRET
 
 app.get('/api/users', async (req, res) => {
     const users = await User.find()

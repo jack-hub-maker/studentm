@@ -1,3 +1,4 @@
+//第一个版本的后端代码，server.js为修改版，请使用修改版
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')

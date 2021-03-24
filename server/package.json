@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "svg-captcha": "^1.4.0"
+  }
+}
