@@ -10,7 +10,7 @@ const router = new VueRouter({
     routes: [
     //重定向规则自动访问到login
     { path: '/', redirect: '/login' },
-    { path: '/login', component: Login },
+    { path: '/login', component: Login, props:true },
     { path: '/register', component: Register },
     { 
     path: '/home', 

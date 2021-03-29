@@ -12,10 +12,11 @@ app.use(express.json())
 
 app.use(cookieParase());
 app.get("/api/getCaptcha",function(req, res, next){
+    const KEYS = config.KEYS
     var captcha = svgCaptcha.create({ 
       inverse: false, // 翻转颜色 
       fontSize: 48, // 字体大小 
-      noise: 2, // 噪声线条数 
+      noise: 8, // 噪声线条数 
       width: 100, // 宽度 
       height: 40, // 高度 
       size: 4,// 验证码长度
@@ -25,7 +26,11 @@ app.get("/api/getCaptcha",function(req, res, next){
     req.session = captcha.text.toLowerCase(); 
     console.log(req.session); //0xtg 生成的验证码
     //保存到cookie 方便前端调用验证
-    res.cookie('captcha', req.session); 
+    res.cookie('captcha', KEYS+req.session); 
+    // var aa = require('bcryptjs').hashSync(req.session,10);
+    // console.log(aa);
+    // res.cookie('captcha', aa); 
+
     res.setHeader('Content-Type', 'image/svg+xml');
     res.write(String(captcha.data));
     res.end();

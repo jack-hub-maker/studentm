@@ -87,7 +87,7 @@
       <span v-cloak >北京时间：{{ date | dateFormat }}</span>
 
       <i class="el-icon-edit" @click="fetch()"
-        >简易学生成绩管理系统1.0.1</i>
+        >学生成绩信息管理系统1.0.1</i>
 
         <span>当前用户: {{username}}</span>
 

@@ -40,7 +40,7 @@
             type="text"
             placeholder="请输入验证码:"
           ></el-input>
-          <a href="#" rel="external nofollow" @click="editCaptcha">
+          <a href="#"  @click="editCaptcha">
             <img
               src="http://localhost:3001/api/getCaptcha"
               alt=""
@@ -64,7 +64,7 @@
         <!-- 按钮区域 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="createUser">注册</el-button>
-          <el-button type="primary" @click="login">登录</el-button>
+          <el-button type="primary" @click="login()">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -205,13 +205,19 @@ export default {
       //     })
 
       // });
+      var KEYS = 'khusdear32520.bhjdbsjde3.15d6edgwuydeac'
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return;
 
         let captcha = document.cookie.split("=")[1];
-        let yzm = this.loginForm.cap;
+
+        let yzm = KEYS + this.loginForm.cap ;
+
+        // let yzms = require('bcryptjs').hashSync(yzm, 10)
+        // let yzms = await require('bcryptjs').compareSync(captcha,10)
         console.log(yzm);
         console.log(captcha);
+        console.log(document.cookie);
         if (yzm != captcha) {
           return this.$message.warning("验证码错误");
         }
@@ -230,7 +236,8 @@ export default {
         window.sessionStorage.setItem("token", res.token);
         window.sessionStorage.setItem("username", res.user.username);
         // 2. 通过编程式导航跳转到后台主页，路由地址是 /home
-        this.$router.push("/home");
+        this.$router.push({path:"/home"});
+        // this.$router.push({path:"/home",query:{id}});
       });
     },
   },
