@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <transition name="el-zoom-in-top">
+    <transition name="el-zoom-in-top" >
       <el-dialog
         :title="dialogTitle"
         :visible.sync="dialogFormVisible"
