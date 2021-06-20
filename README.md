@@ -1,4 +1,4 @@
-# studentm
+# 简易学生成绩信息管理系统
 
 ## Project setup
 ```
